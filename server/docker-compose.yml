@@ -1,0 +1,51 @@
+version: '3'
+
+services:
+  psql-server:
+    container_name: psql-server
+    hostname: postgres
+    image: postgres:latest
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+      - DATABASE_HOST=${DB_HOST}
+    ports:
+      - '5432:5432'
+    volumes:
+      - psql-volume:/var/lib/postgresql/data
+    networks:
+      - fullstack
+
+  golang-web-app:
+    container_name: golang-web-app
+    hostname: golangapp
+    depends_on:
+      - psql-server
+    build: .
+    networks:
+      - fullstack
+    ports:
+      - 3000:3000
+
+  pgadmin:
+    image: dpage/pgadmin4
+    hostname: pgadmin
+    container_name: pgadmin-server
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    depends_on:
+      - psql-server
+    ports:
+      - "5050:80"
+    networks:
+      - fullstack
+
+volumes:
+  psql-volume:
+
+
+networks:
+  fullstack:
+    driver: bridge
