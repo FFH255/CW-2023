@@ -1,15 +1,18 @@
-FROM golang:latest
+FROM golang:alpine3.17 as build-env
 
+RUN mkdir /app
 WORKDIR /app
 
-COPY go.mod ./
+COPY go.mod . 
+COPY go.sum .
+
 
 RUN go mod download
 
-COPY *.go ./
+COPY . .
 
-RUN go build -o /main
-
-EXPOSE 3000
-
-CMD ["/main"]
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -o /go/bin/main
+FROM scratch 
+COPY --from=build-env /go/bin/main /bin/main
+COPY --from=build-env /app/.env /
+ENTRYPOINT ["/bin/main"]
