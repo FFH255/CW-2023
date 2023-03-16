@@ -1,8 +1,6 @@
 package store
 
-import (
-	"os"
-)
+import "github.com/FFH255/CW-2023/internal/hepler"
 
 type Config struct {
 	Host     string
@@ -14,17 +12,10 @@ type Config struct {
 
 func NewConfig() *Config {
 	return &Config{
-		Host:     getEnv("DB_HOST"),
-		Port:     getEnv("DB_PORT"),
-		User:     getEnv("DB_USER"),
-		Password: getEnv("DB_PASSWORD"),
-		DbName:   getEnv("DB_NAME"),
+		Host:     hepler.GetEnv("DB_HOST"),
+		Port:     hepler.GetEnv("DB_PORT"),
+		User:     hepler.GetEnv("DB_USER"),
+		Password: hepler.GetEnv("DB_PASSWORD"),
+		DbName:   hepler.GetEnv("DB_NAME"),
 	}
-}
-
-func getEnv(key string) string {
-	if value, exists := os.LookupEnv(key); exists {
-		return value
-	}
-	return ""
 }

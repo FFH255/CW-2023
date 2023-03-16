@@ -1,10 +1,9 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
-	"github.com/FFH255/CW-2023/internal/store"
+	"github.com/FFH255/CW-2023/internal/apiserver"
 	"github.com/joho/godotenv"
 )
 
@@ -15,13 +14,10 @@ func init() {
 }
 
 func main() {
-	config := store.NewConfig()
-	store := store.New(config)
 
-	if err := store.Open(); err != nil {
-		log.Fatal("Can not ping postres")
+	s := apiserver.New()
+
+	if err := s.Start(); err != nil {
+		log.Fatal(err)
 	}
-
-	fmt.Printf("Connection to postgres established")
-
 }

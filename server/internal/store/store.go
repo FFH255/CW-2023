@@ -12,9 +12,9 @@ type Store struct {
 	Config *Config
 }
 
-func New(config *Config) *Store {
+func New() *Store {
 	return &Store{
-		Config: config,
+		Config: NewConfig(),
 	}
 }
 
@@ -35,4 +35,8 @@ func (s *Store) Open() error {
 	}
 
 	return db.Ping()
+}
+
+func (s *Store) Close() {
+
 }
