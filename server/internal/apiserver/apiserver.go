@@ -26,9 +26,9 @@ func (s *APIServer) Start() error {
 
 	router := router.Configure()
 
-	s.logger.Info("starting api server.")
+	s.logger.Info("API server is up and running [:", s.config.Port, "]")
 
-	return http.ListenAndServe(s.config.Port, router)
+	return http.ListenAndServe(":"+s.config.Port, router)
 }
 
 func (s *APIServer) configureLogger() error {
