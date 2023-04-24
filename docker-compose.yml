@@ -1,6 +1,13 @@
 version: '3'
 
 services:
+  express-server:
+    container_name: express-server
+    hostname: backend
+    build: ./server/
+    ports:
+      - "3000:3000"
+
   psql-server:
     container_name: psql-server
     hostname: postgres
@@ -16,17 +23,6 @@ services:
       - psql-volume:/var/lib/postgresql/data
     networks:
       - fullstack
-
-  golang-web-app:
-    container_name: golang-web-app
-    hostname: golangapp
-    depends_on:
-      - psql-server
-    build: .
-    networks:
-      - fullstack
-    ports:
-      - ${API_PORT}:${API_PORT}
 
   pgadmin:
     image: dpage/pgadmin4

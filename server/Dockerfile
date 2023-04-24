@@ -1,18 +1,12 @@
-FROM golang:alpine3.17 as build-env
+FROM node:16
 
-RUN mkdir /app
-WORKDIR /app
+WORKDIR /usr/src/app
 
-COPY go.mod . 
-COPY go.sum .
+COPY package*.json ./
 
-
-RUN go mod download
+RUN npm install
 
 COPY . .
 
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -installsuffix cgo -o /go/bin/main
-FROM scratch 
-COPY --from=build-env /go/bin/main /bin/main
-COPY --from=build-env /app/.env /
-ENTRYPOINT ["/bin/main"]
+EXPOSE 8080
+CMD [ "node", "server.js" ]
